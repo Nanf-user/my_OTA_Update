@@ -1,0 +1,29 @@
+┌──────────────────────────────────────────────────────────┐
+│  Step 1: 编译 Bootloader 工程 → 得到 boot.bin            │
+│          (Keil: Build → Output/Objects/boot.bin)         │
+│                                                          │
+│  Step 2: 用 ST-Link 烧写 boot.bin 到 0x08000000         │
+│          (或 Keil: Download)                             │
+│                                                          │
+│  Step 3: 编译 Application 工程 → 得到 app.bin            │
+│                                                          │
+│  Step 4: 用 ST-Link 烧写 app.bin 到 0x08004400          │
+│          (注意: Keil Download 会自动按工程配置的地址烧写) │
+│                                                          │
+│  Step 5: 复位 → 看串口日志                               │
+│          应该看到:                                        │
+│          [BL] Bootloader v1.0 started                    │
+│          [BL] No OTA pending, boot normally.             │
+│          [BL] Jumping to APP @ 0x0800xxxx               │
+│          ================================                │
+│          [APP] Application v1.0 started                  │
+│          [APP] Clock: 72MHz                              │
+│          [APP] W25Q64 ID: 0xEF4017                      │
+│                                                          │
+│  Step 6: OTA 升级测试                                    │
+│          1. 启动 python ota_server.py                    │
+│          2. 修改APP版本号，重新编译出 app.bin              │
+│          3. 用 ESP32 触发 OTA                            │
+│          4. 观察串口日志                                  │
+│          5. 复位后应该运行新版APP                         │
+└──────────────────────────────────────────────────────────┘
